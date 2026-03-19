@@ -1,0 +1,8 @@
+{
+  "name": "caleagent-site",
+  "version": "1.0.0",
+  "description": "Cale landing page and API functions",
+  "engines": {
+    "node": "20.x"
+  }
+}
