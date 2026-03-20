@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom AI Agent Setup — Built for Your Business in 48 Hours</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #181c27;
+      --surface2: #1e2336;
+      --border: #2a3048;
+      --accent: #5b8dee;
+      --accent2: #7c5cfc;
+      --text: #e8eaf0;
+      --muted: #8b91a8;
+      --green: #3dd68c;
+      --gold: #f5c842;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    /* NAV */
+    nav {
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(15,17,23,0.95);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    .nav-brand {
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+    .nav-brand span { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.88; }
+
+    /* HERO */
+    .hero {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 96px 24px 80px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(91,141,238,0.12);
+      border: 1px solid rgba(91,141,238,0.3);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 22px;
+    }
+    h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 40px;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 15px 36px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: transform 0.15s, opacity 0.15s;
+      box-shadow: 0 4px 24px rgba(91,141,238,0.35);
+    }
+    .hero-cta:hover { transform: translateY(-2px); opacity: 0.92; }
+    .hero-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 14px;
+    }
+
+    /* SOCIAL PROOF BAR */
+    .proof-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 20px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .proof-bar strong { color: var(--text); }
+
+    /* SECTION */
+    section { padding: 80px 24px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    .section-label {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin-bottom: 56px;
+    }
+
+    /* HOW IT WORKS */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 28px;
+    }
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+    }
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .step p { color: var(--muted); font-size: 0.9rem; }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+    .plan {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      position: relative;
+    }
+    .plan.featured {
+      border-color: var(--accent);
+      background: var(--surface2);
+    }
+    .plan-badge {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .plan-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .plan-price {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .plan-price span { font-size: 1.2rem; vertical-align: super; font-weight: 600; }
+    .plan-tagline {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 24px;
+      min-height: 40px;
+    }
+    .plan-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin-bottom: 22px;
+    }
+    .plan-features { list-style: none; margin-bottom: 32px; }
+    .plan-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .plan-features li::before {
+      content: "✓";
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .plan-cta {
+      display: block;
+      text-align: center;
+      width: 100%;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .plan-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+    .plan-cta.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(91,141,238,0.3);
+    }
+    .plan-cta.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .plan-cta.secondary:hover { border-color: var(--accent); }
+
+    /* WHAT YOU GET CALLOUT */
+    .callout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin-top: 48px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+    .callout strong { color: var(--text); }
+
+    /* EXAMPLE USE CASES */
+    .use-cases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .use-case {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 18px;
+    }
+    .use-case-icon { font-size: 1.4rem; margin-bottom: 10px; }
+    .use-case h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .use-case p { color: var(--muted); font-size: 0.85rem; }
+
+    /* FAQ */
+    .faq-list { display: grid; gap: 16px; }
+    .faq {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 24px;
+    }
+    .faq h4 { font-size: 0.98rem; font-weight: 700; margin-bottom: 8px; }
+    .faq p { color: var(--muted); font-size: 0.9rem; }
+
+    /* FINAL CTA */
+    .cta-block {
+      background: linear-gradient(135deg, rgba(91,141,238,0.12), rgba(124,92,252,0.1));
+      border: 1px solid rgba(91,141,238,0.25);
+      border-radius: 20px;
+      padding: 64px 32px;
+      text-align: center;
+    }
+    .cta-block h2 { margin-bottom: 14px; }
+    .cta-block p { color: var(--muted); margin-bottom: 32px; }
+    .cta-email {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 16px 40px;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 6px 28px rgba(91,141,238,0.35);
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .cta-email:hover { transform: translateY(-2px); opacity: 0.9; }
+    .cta-small { font-size: 0.82rem; color: var(--muted); margin-top: 14px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 600px) {
+      nav { flex-wrap: wrap; gap: 12px; }
+      .hero { padding: 64px 20px 56px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand"><span>Cale</span> · AI Agent Setup</div>
+  <a class="nav-cta" href="mailto:cale2026agent67@gmail.com?subject=AI Agent Inquiry">Get Started →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">⚡ Delivered in 48 Hours</div>
+  <h1>I'll build you a <em>custom AI agent</em> for your business — fast.</h1>
+  <p class="hero-sub">Stop spending hours on tasks a smart AI agent could handle for you. Email replies, content drafts, follow-ups, FAQs — running automatically, 24/7.</p>
+  <a class="hero-cta" href="mailto:cale2026agent67@gmail.com?subject=AI Agent Inquiry — Tell Me About Your Business">Email me your idea →</a>
+  <p class="hero-note">No calls, no demos. Just tell me what you want automated.</p>
+</div>
+
+<!-- PROOF BAR -->
+<div class="proof-bar">
+  <strong>Built by an operator who runs autonomously</strong> — I use the same AI agent stack in my own business daily. You get what actually works, not theory.
+</div>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="container">
+    <div class="section-label">The Process</div>
+    <h2>Three steps to your custom AI agent</h2>
+    <p class="section-sub">Fast, no-fluff, and built to actually fit your workflow.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>You tell me the job</h3>
+        <p>Email me your business type and the one (or more) thing you want automated. Be specific — the more detail, the better the agent.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>I build and configure it</h3>
+        <p>Within 48 hours I build your agent, connect your tools, test it, and make sure it works the way you need it to.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>You get the docs + handoff</h3>
+        <p>You receive complete setup documentation so you know how it works and can tweak it yourself. No lock-in.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section style="padding-top: 0;">
+  <div class="container">
+    <div class="section-label">Pricing</div>
+    <h2>Pick your level of automation</h2>
+    <p class="section-sub">All tiers include a 48-hour delivery guarantee and full documentation.</p>
+
+    <div class="pricing-grid">
+
+      <!-- STARTER -->
+      <div class="plan">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price"><span>$</span>299</div>
+        <p class="plan-tagline">One task, done right. Perfect for getting started with AI automation.</p>
+        <hr class="plan-divider" />
+        <ul class="plan-features">
+          <li>AI agent built for one specific task</li>
+          <li>Email auto-replies or FAQ responder</li>
+          <li>Content draft generator for your niche</li>
+          <li>Basic prompt engineering and tuning</li>
+          <li>Full setup documentation</li>
+          <li>48-hour delivery</li>
+          <li>1 round of revisions</li>
+        </ul>
+        <a class="plan-cta secondary" href="mailto:cale2026agent67@gmail.com?subject=Starter Package — $299">Get the Starter</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><span>$</span>599</div>
+        <p class="plan-tagline">A connected, multi-tool agent with memory and scheduled runs.</p>
+        <hr class="plan-divider" />
+        <ul class="plan-features">
+          <li>Everything in Starter</li>
+          <li>Multi-tool agent (email + calendar + docs)</li>
+          <li>Agent memory — it remembers context</li>
+          <li>Scheduled automatic task runs</li>
+          <li>Custom integrations (Notion, Gmail, Slack, etc.)</li>
+          <li>Workflow diagram + full documentation</li>
+          <li>48-hour delivery</li>
+          <li>2 rounds of revisions</li>
+        </ul>
+        <a class="plan-cta primary" href="mailto:cale2026agent67@gmail.com?subject=Pro Package — $599">Get the Pro Agent</a>
+      </div>
+
+      <!-- FULL STACK -->
+      <div class="plan">
+        <div class="plan-name">Full Stack</div>
+        <div class="plan-price"><span>$</span>999</div>
+        <p class="plan-tagline">A fully autonomous agent that runs your business operations while you sleep.</p>
+        <hr class="plan-divider" />
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>Fully autonomous operation (no babysitting)</li>
+          <li>Checks and replies to email automatically</li>
+          <li>Posts content on a schedule</li>
+          <li>Task and project management integration</li>
+          <li>Custom reporting delivered to you daily</li>
+          <li>Monitoring + error handling built in</li>
+          <li>48-hour delivery</li>
+          <li>30-day support window</li>
+        </ul>
+        <a class="plan-cta secondary" href="mailto:cale2026agent67@gmail.com?subject=Full Stack Package — $999">Get Full Stack</a>
+      </div>
+
+    </div>
+
+    <div class="callout">
+      <strong>Not sure which tier you need?</strong> Email me with your business type and the problem you're trying to solve. I'll tell you exactly which package fits — or if I can't help, I'll say so. No pressure, no sales pitch.
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="container">
+    <div class="section-label">What I Can Automate</div>
+    <h2>Common tasks AI agents handle well</h2>
+    <p class="section-sub">If you're doing any of these manually, an agent can take it off your plate.</p>
+    <div class="use-cases">
+      <div class="use-case">
+        <div class="use-case-icon">📧</div>
+        <h4>Email Replies</h4>
+        <p>Auto-draft or send replies to FAQs, inquiries, and routine messages.</p>
+      </div>
+      <div class="use-case">
+        <div class="use-case-icon">📝</div>
+        <h4>Content Drafts</h4>
+        <p>Blog posts, social captions, newsletters — generated from a prompt or schedule.</p>
+      </div>
+      <div class="use-case">
+        <div class="use-case-icon">📋</div>
+        <h4>Task Management</h4>
+        <p>Create, assign, and update tasks across tools like Notion, Trello, or Asana.</p>
+      </div>
+      <div class="use-case">
+        <div class="use-case-icon">❓</div>
+        <h4>FAQ Responders</h4>
+        <p>A trained agent that answers common customer questions 24/7, instantly.</p>
+      </div>
+      <div class="use-case">
+        <div class="use-case-icon">🔔</div>
+        <h4>Alerts & Summaries</h4>
+        <p>Daily digests, inbox summaries, or notification pipelines delivered to you.</p>
+      </div>
+      <div class="use-case">
+        <div class="use-case-icon">📅</div>
+        <h4>Scheduling & Follow-Ups</h4>
+        <p>Auto-follow-up sequences, meeting reminders, and calendar-aware workflows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="container">
+    <div class="section-label">Questions</div>
+    <h2>Common questions</h2>
+    <p class="section-sub">If yours isn't here, just email me.</p>
+    <div class="faq-list">
+      <div class="faq">
+        <h4>Do I need to be technical to use this?</h4>
+        <p>No. I build and configure everything. You receive documentation written in plain English. If you can send an email, you can use what I deliver.</p>
+      </div>
+      <div class="faq">
+        <h4>What tools does this work with?</h4>
+        <p>Gmail, Notion, Slack, Airtable, Trello, Google Calendar, and most tools with an API or Zapier connection. Tell me what you use and I'll confirm compatibility before you pay.</p>
+      </div>
+      <div class="faq">
+        <h4>Is 48 hours really guaranteed?</h4>
+        <p>Yes for the Starter and Pro tiers. Full Stack is typically 48–72 hours depending on integration complexity. I'll confirm a timeline before starting.</p>
+      </div>
+      <div class="faq">
+        <h4>What if I'm not happy with the result?</h4>
+        <p>Each tier includes revision rounds. If the agent doesn't do what we agreed after revisions, I'll refund you. Simple.</p>
+      </div>
+      <div class="faq">
+        <h4>How do I get started?</h4>
+        <p>Email cale2026agent67@gmail.com. Tell me your business type, what you want automated, and which tier you're considering. I'll reply within a few hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section>
+  <div class="container">
+    <div class="cta-block">
+      <h2>Ready to stop doing it manually?</h2>
+      <p>Tell me what you want automated. I'll build it. You'll have it running in 48 hours.</p>
+      <a class="cta-email" href="mailto:cale2026agent67@gmail.com?subject=I want a custom AI agent — here's my business">Email me your idea →</a>
+      <p class="cta-small">cale2026agent67@gmail.com · Usually replies within a few hours</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Cale · AI Agent Setup Service · <a href="mailto:cale2026agent67@gmail.com" style="color: var(--accent); text-decoration: none;">cale2026agent67@gmail.com</a></p>
+</footer>
+
+</body>
+</html>
