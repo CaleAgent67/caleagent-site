@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freelance Rate Calculator — Know Your Worth</title>
+  <meta name="description" content="Calculate your minimum viable hourly rate and project pricing in seconds. Built for freelancers who refuse to undercharge." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card2: #162032;
+      --border: #334155;
+      --green: #10b981;
+      --green-dark: #059669;
+      --green-light: #34d399;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --input-bg: #0f172a;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ── */
+    header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(16,185,129,0.15);
+      color: var(--green-light);
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      margin-bottom: 20px;
+    }
+    header h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    header h1 span { color: var(--green); }
+    header p {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ── LAYOUT ── */
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 28px;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .card-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #0f172a;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-header h2 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .card-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ── FORM INPUTS ── */
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 520px) {
+      .input-grid { grid-template-columns: 1fr; }
+      .card { padding: 20px; }
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .field .hint {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: -3px;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .prefix {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+      pointer-events: none;
+    }
+    .suffix {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 13px;
+      pointer-events: none;
+    }
+    input[type="number"],
+    input[type="email"],
+    select {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .has-prefix input { padding-left: 28px; }
+    .has-suffix input { padding-right: 50px; }
+    input:focus, select:focus { border-color: var(--green); }
+    select { cursor: pointer; }
+    select option { background: var(--bg-card); }
+
+    /* checkbox */
+    .check-field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 12px 0 4px;
+    }
+    .check-field input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--green);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .check-field span { font-size: 14px; color: var(--text-muted); }
+    .rush-tag {
+      display: inline-block;
+      background: rgba(16,185,129,0.12);
+      color: var(--green-light);
+      font-size: 11px;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 4px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 24px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--green);
+      color: #0f172a;
+      width: 100%;
+    }
+    .btn-primary:hover { background: var(--green-dark); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 100%;
+    }
+    .btn-outline:hover { border-color: var(--green); color: var(--green); }
+    .btn-gumroad {
+      background: var(--green);
+      color: #0f172a;
+      width: 100%;
+      font-size: 16px;
+      padding: 15px 24px;
+    }
+    .btn-gumroad:hover { background: var(--green-dark); }
+    .btn-secondary-link {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 100%;
+      font-size: 14px;
+      padding: 12px 24px;
+      margin-top: 10px;
+    }
+    .btn-secondary-link:hover { border-color: var(--green); color: var(--green); }
+
+    /* ── RESULTS ── */
+    .results {
+      display: none;
+      margin-top: 24px;
+    }
+    .results.visible { display: block; }
+    .results-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .rate-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 480px) {
+      .rate-grid { grid-template-columns: 1fr; }
+    }
+    .rate-box {
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .rate-box.highlight {
+      border-color: var(--green);
+      background: rgba(16,185,129,0.07);
+    }
+    .rate-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .rate-box.highlight .rate-label { color: var(--green-light); }
+    .rate-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .rate-box.highlight .rate-value { color: var(--green); }
+    .rate-sublabel {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 3px;
+    }
+
+    .hours-note {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      padding: 10px;
+      background: var(--bg-card2);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .hours-note strong { color: var(--text); }
+
+    .save-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(16,185,129,0.08);
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 10px;
+      padding: 16px 20px;
+      flex-wrap: wrap;
+    }
+    .save-cta p {
+      font-size: 14px;
+      color: var(--text-muted);
+      flex: 1;
+      min-width: 200px;
+    }
+    .save-cta p strong { color: var(--text); }
+    .btn-save {
+      background: var(--green);
+      color: #0f172a;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-save:hover { background: var(--green-dark); }
+
+    /* project quote */
+    .quote-box {
+      background: rgba(16,185,129,0.07);
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 10px;
+      padding: 20px 24px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .quote-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--green-light);
+      margin-bottom: 6px;
+    }
+    .quote-value {
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--green);
+    }
+    .quote-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .kit-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .kit-cta p {
+      font-size: 13px;
+      color: var(--text-muted);
+      flex: 1;
+      min-width: 180px;
+    }
+    .btn-kit {
+      background: var(--green);
+      color: #0f172a;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-kit:hover { background: var(--green-dark); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--text); }
+    .modal-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(16,185,129,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 22px;
+    }
+    .modal h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .modal p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .modal-form { display: flex; flex-direction: column; gap: 12px; }
+    .modal-form input[type="email"] {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      padding: 12px 16px;
+      outline: none;
+      text-align: center;
+    }
+    .modal-form input:focus { border-color: var(--green); }
+    .modal-error {
+      font-size: 13px;
+      color: #f87171;
+      display: none;
+    }
+    .modal-success { display: none; text-align: center; }
+    .modal-success .success-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+    .modal-success h4 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+    .modal-success p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 0;
+    }
+    .privacy-note {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 8px;
+    }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 28px;
+    }
+    .cta-section .badge { margin-bottom: 16px; }
+    .cta-section h2 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .cta-section p {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 28px;
+    }
+    .cta-section .perks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .perk {
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.2);
+      color: var(--green-light);
+      border-radius: 999px;
+      font-size: 13px;
+      padding: 5px 14px;
+    }
+    .cta-btn-wrap { max-width: 360px; margin: 0 auto; }
+    .price-note {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 12px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 32px 20px;
+      color: var(--text-dim);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    footer a { color: var(--green); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .results.visible { animation: fadeIn 0.3s ease; }
+    .modal { animation: fadeIn 0.2s ease; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">Free Tool</div>
+    <h1>Know exactly what to <span>charge</span>.</h1>
+    <p>Stop guessing. Calculate your minimum viable hourly rate and project pricing in seconds — built for freelancers who refuse to undercharge.</p>
+  </header>
+
+  <main>
+
+    <!-- ════════════════════════════════
+         SECTION 1: HOURLY RATE CALCULATOR
+         ════════════════════════════════ -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">1</div>
+        <div>
+          <h2>Hourly Rate Calculator</h2>
+          <p>Based on your real income goals, not guesswork</p>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div class="field">
+          <label for="monthly-income">Target monthly income</label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix">$</span>
+            <input type="number" id="monthly-income" value="5000" min="0" step="100" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="vacation-weeks">Weeks vacation / year</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="vacation-weeks" value="4" min="0" max="51" />
+            <span class="suffix">wks</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="billable-hours">Billable hours / week</label>
+          <span class="hint">Most freelancers bill 50–60% of their time</span>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="billable-hours" value="25" min="1" max="80" />
+            <span class="suffix">hrs</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="monthly-expenses">Monthly business expenses</label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix">$</span>
+            <input type="number" id="monthly-expenses" value="300" min="0" step="50" />
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="calculateRates()">Calculate My Rates →</button>
+
+      <div class="results" id="rate-results">
+        <hr class="results-divider" />
+
+        <div class="rate-grid">
+          <div class="rate-box">
+            <div class="rate-label">Survive</div>
+            <div class="rate-value" id="min-rate">—</div>
+            <div class="rate-sublabel">minimum rate</div>
+          </div>
+          <div class="rate-box highlight">
+            <div class="rate-label">Thrive ✦</div>
+            <div class="rate-value" id="target-rate">—</div>
+            <div class="rate-sublabel">target rate</div>
+          </div>
+          <div class="rate-box">
+            <div class="rate-label">Scale</div>
+            <div class="rate-value" id="stretch-rate">—</div>
+            <div class="rate-sublabel">stretch rate</div>
+          </div>
+        </div>
+
+        <div class="hours-note">
+          Annual billable hours: <strong id="annual-hours">—</strong> &nbsp;·&nbsp;
+          Target rate includes 30% buffer for taxes &amp; dry spells
+        </div>
+
+        <div class="save-cta">
+          <p><strong>Your rates are calculated.</strong> Enter your email to save them and get the free Freelancer Client Tracker.</p>
+          <button class="btn-save" onclick="openModal()">Save my rates →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         SECTION 2: PROJECT PRICE ESTIMATOR
+         ════════════════════════════════ -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">2</div>
+        <div>
+          <h2>Project Price Estimator</h2>
+          <p>Turn your hourly rate into a confident project quote</p>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div class="field">
+          <label for="project-hours">Estimated project hours</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="project-hours" value="" placeholder="e.g. 40" min="1" />
+            <span class="suffix">hrs</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="project-rate">Your hourly rate</label>
+          <span class="hint" id="rate-autofill-hint" style="display:none;">✓ Auto-filled from Section 1</span>
+          <div class="input-wrap has-prefix">
+            <span class="prefix">$</span>
+            <input type="number" id="project-rate" value="" placeholder="e.g. 85" min="1" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="complexity">Complexity buffer</label>
+          <select id="complexity">
+            <option value="0.10">Low (10%) — straightforward</option>
+            <option value="0.25" selected>Medium (25%) — some unknowns</option>
+            <option value="0.40">High (40%) — complex scope</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="revision-rounds">Revision rounds included</label>
+          <div class="input-wrap">
+            <input type="number" id="revision-rounds" value="2" min="0" max="20" />
+          </div>
+        </div>
+      </div>
+
+      <div class="check-field">
+        <input type="checkbox" id="rush-job" />
+        <span>Rush job <span class="rush-tag">+25%</span> — needed within half the normal timeline</span>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <button class="btn btn-primary" onclick="calculateProject()">Calculate Project Quote →</button>
+      </div>
+
+      <div class="results" id="project-results">
+        <hr class="results-divider" />
+
+        <div class="quote-box">
+          <div class="quote-label">Your Project Quote</div>
+          <div class="quote-value" id="quote-range">—</div>
+          <div class="quote-sub" id="quote-breakdown">Based on your inputs</div>
+        </div>
+
+        <div class="kit-cta">
+          <p>Never undersell yourself again. The complete system for pricing, client onboarding, and running your freelance business.</p>
+          <a href="https://caleagent.gumroad.com" target="_blank" rel="noopener" class="btn-kit">Get the Starter Kit — $5 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         CTA SECTION (always visible as footer)
+         ════════════════════════════════ -->
+    <div class="cta-section" id="cta-section">
+      <div class="badge">$5 One-Time</div>
+      <h2>Want the complete system?</h2>
+      <p>The Freelancer Starter Kit gives you everything you need to run your freelance business like a business — not a side hustle.</p>
+      <div class="perks">
+        <span class="perk">This calculator</span>
+        <span class="perk">100 AI prompts</span>
+        <span class="perk">Notion quickstart guide</span>
+        <span class="perk">Client onboarding templates</span>
+      </div>
+      <div class="cta-btn-wrap">
+        <a href="https://caleagent.gumroad.com" target="_blank" rel="noopener" class="btn btn-gumroad">Get the Starter Kit — $5 →</a>
+        <a href="https://caleagent.gumroad.com/l/freelancer-os" target="_blank" rel="noopener" class="btn btn-secondary-link">Already have a system? Upgrade to Freelancer OS →</a>
+        <p class="price-note">One-time payment. Instant download. No subscription.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ════════════════════════════════
+       EMAIL MODAL
+       ════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+
+      <div id="modal-form-view">
+        <div class="modal-icon">📊</div>
+        <h3 id="modal-title">Save your rate calculations</h3>
+        <p>We'll also send you the free <strong>Freelancer Client Tracker</strong> — a Notion template for managing clients and projects.</p>
+
+        <form class="modal-form" onsubmit="submitEmail(event)">
+          <input type="email" id="modal-email" placeholder="your@email.com" required autocomplete="email" />
+          <div class="modal-error" id="modal-error">Something went wrong. Please try again.</div>
+          <button type="submit" class="btn btn-primary" id="submit-btn">Save My Rates →</button>
+        </form>
+        <p class="privacy-note">No spam, ever. Unsubscribe anytime. Your data is safe.</p>
+      </div>
+
+      <div class="modal-success" id="modal-success">
+        <div class="success-icon">✅</div>
+        <h4>Saved! Check your inbox.</h4>
+        <p>Your rates are saved and the Freelancer Client Tracker is on its way. Check your inbox (and spam just in case).</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Built for freelancers by <a href="https://caleagent.gumroad.com" target="_blank">Cale</a> · <a href="https://caleagent.gumroad.com/l/freelancer-os" target="_blank">Freelancer OS</a></p>
+  </footer>
+
+  <script>
+    // ─── STATE ───
+    let calculatedTargetRate = null;
+
+    // ─── SECTION 1: HOURLY RATE CALCULATOR ───
+    function calculateRates() {
+      const monthly = parseFloat(document.getElementById('monthly-income').value) || 0;
+      const vacationWeeks = parseFloat(document.getElementById('vacation-weeks').value) || 0;
+      const billableHrs = parseFloat(document.getElementById('billable-hours').value) || 0;
+      const expenses = parseFloat(document.getElementById('monthly-expenses').value) || 0;
+
+      if (monthly <= 0 || billableHrs <= 0) {
+        alert('Please enter your target income and billable hours to calculate your rates.');
+        return;
+      }
+
+      const annualIncomeNeeded = (monthly * 12) + (expenses * 12);
+      const billableWeeks = 52 - vacationWeeks;
+      const totalBillableHours = billableWeeks * billableHrs;
+
+      if (totalBillableHours <= 0) {
+        alert('Billable hours/year must be greater than zero. Reduce vacation weeks or increase billable hours/week.');
+        return;
+      }
+
+      const minRate = annualIncomeNeeded / totalBillableHours;
+      const targetRate = minRate * 1.3;
+      const stretchRate = minRate * 1.6;
+
+      document.getElementById('min-rate').textContent = '$' + Math.ceil(minRate) + '/hr';
+      document.getElementById('target-rate').textContent = '$' + Math.ceil(targetRate) + '/hr';
+      document.getElementById('stretch-rate').textContent = '$' + Math.ceil(stretchRate) + '/hr';
+      document.getElementById('annual-hours').textContent = Math.round(totalBillableHours).toLocaleString() + ' hrs';
+
+      // Store for auto-fill
+      calculatedTargetRate = Math.ceil(targetRate);
+      const projectRateInput = document.getElementById('project-rate');
+      projectRateInput.value = calculatedTargetRate;
+      document.getElementById('rate-autofill-hint').style.display = 'block';
+
+      // Show results
+      document.getElementById('rate-results').classList.add('visible');
+      document.getElementById('rate-results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ─── SECTION 2: PROJECT PRICE ESTIMATOR ───
+    function calculateProject() {
+      const hours = parseFloat(document.getElementById('project-hours').value) || 0;
+      const rate = parseFloat(document.getElementById('project-rate').value) || 0;
+      const complexity = parseFloat(document.getElementById('complexity').value) || 0.25;
+      const revisions = parseFloat(document.getElementById('revision-rounds').value) || 0;
+      const rush = document.getElementById('rush-job').checked;
+
+      if (hours <= 0 || rate <= 0) {
+        alert('Please enter estimated hours and your hourly rate to calculate a project quote.');
+        return;
+      }
+
+      const base = hours * rate;
+      const withBuffer = base * (1 + complexity);
+      const withRevisions = withBuffer + (revisions * rate * 2);
+      const final = rush ? withRevisions * 1.25 : withRevisions;
+
+      const low = Math.round(final * 0.9);
+      const high = Math.round(final * 1.1);
+
+      const fmt = n => '$' + n.toLocaleString();
+      document.getElementById('quote-range').textContent = fmt(low) + ' – ' + fmt(high);
+
+      const complexityLabel = { '0.10': 'Low', '0.25': 'Medium', '0.40': 'High' }[String(complexity)] || 'Medium';
+      const breakdown = [
+        `${hours}h × ${fmt(rate)}/hr base`,
+        `${complexityLabel} complexity buffer`,
+        `${revisions} revision round${revisions !== 1 ? 's' : ''}`,
+        rush ? 'Rush rate applied' : null
+      ].filter(Boolean).join(' · ');
+      document.getElementById('quote-breakdown').textContent = breakdown;
+
+      document.getElementById('project-results').classList.add('visible');
+      document.getElementById('project-results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ─── MODAL ───
+    function openModal() {
+      document.getElementById('modal-overlay').classList.add('open');
+      document.getElementById('modal-email').focus();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeModalOutside(e) {
+      if (e.target === document.getElementById('modal-overlay')) closeModal();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    async function submitEmail(e) {
+      e.preventDefault();
+      const email = document.getElementById('modal-email').value.trim();
+      const btn = document.getElementById('submit-btn');
+      const errEl = document.getElementById('modal-error');
+
+      errEl.style.display = 'none';
+      btn.textContent = 'Saving…';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/subscribe-calculator', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          // Show success state in modal
+          document.getElementById('modal-form-view').style.display = 'none';
+          document.getElementById('modal-success').style.display = 'block';
+
+          // Auto-close after 2.5s
+          setTimeout(() => {
+            closeModal();
+            document.getElementById('modal-form-view').style.display = 'block';
+            document.getElementById('modal-success').style.display = 'none';
+            btn.textContent = 'Save My Rates →';
+            btn.disabled = false;
+          }, 2500);
+        } else {
+          throw new Error(data.error || 'Failed');
+        }
+      } catch (err) {
+        errEl.style.display = 'block';
+        btn.textContent = 'Save My Rates →';
+        btn.disabled = false;
+      }
+    }
+
+    // ─── ENTER KEY on rate calculator inputs ───
+    document.querySelectorAll('#monthly-income, #vacation-weeks, #billable-hours, #monthly-expenses').forEach(el => {
+      el.addEventListener('keydown', e => { if (e.key === 'Enter') calculateRates(); });
+    });
+    document.querySelectorAll('#project-hours, #project-rate, #revision-rounds').forEach(el => {
+      el.addEventListener('keydown', e => { if (e.key === 'Enter') calculateProject(); });
+    });
+  </script>
+
+</body>
+</html>
